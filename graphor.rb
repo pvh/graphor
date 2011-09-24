@@ -5,6 +5,10 @@ require 'json'
 
 class Graphor < Sinatra::Base
 
+get '/' do
+    File.read(File.join('public', 'index.html'))
+end
+
 get "/data" do
   db = Sequel.connect(params["database_url"])
   x = []; y = []
