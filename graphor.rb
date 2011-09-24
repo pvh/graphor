@@ -19,23 +19,28 @@ get "/data" do
   grab_the_data(params["database_url"], params["query"])
 end
 
-delete "/query/:id" do
+delete "/:id" do
   q = Query[:alias => params["id"]]
   q.destroy
 end
 
-get "/query/:id/results" do
+get "/:id/data" do
   q = Query[:alias => params["id"]]
   grab_the_data(q[:database_url], q[:query])
 end
 
-post "/query" do
+post "/" do
   q = Query.create(
     :alias => (0...8).map{ ('a'..'z').to_a[rand(26)] }.join,
     :database_url => params["database_url"],
     :query => params["query"])
   q[:alias]
 end
+
+get '/:alias' do
+  File.read(File.join('public', 'index.html'))
+end
+
 
 helpers do
   def grab_the_data(database_url, query)
@@ -51,7 +56,7 @@ helpers do
       end
       y << row[:y]
     end
-    {:x => x, :xlabels => xlabels, :y => y}.to_json
+    {:x => x, :xlabels => xlabels, :y => y, :query => query}.to_json
   end
 end
 

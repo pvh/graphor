@@ -13,7 +13,7 @@
         <script type="text/javascript" charset="utf-8">
           window.onload = function() {
             $.ajax({
-              url: "/data" + document.location.search,
+              url: document.location + "/data",
               dataType: 'json',
               success: function(content) {
                 if (content != "") {
@@ -38,9 +38,10 @@
                 var xlabels = content.xlabels
                 var y = content.y
 
-                r.g.text(160, 10, "Stuff");
                 r.g.linechart(10, 10, 1400, 220, x, y, {axisxlabels: xlabels});
-              
+
+                // label the graph with the query
+                r.g.text(160, 10, content.query)
             };
         </script>
     </head>
