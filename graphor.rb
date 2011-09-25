@@ -34,11 +34,11 @@ post "/" do
     :alias => (0...8).map{ ('a'..'z').to_a[rand(26)] }.join,
     :database_url => params["database_url"],
     :query => params["query"])
-  q[:alias]
+  redirect q[:alias]
 end
 
 get '/:alias' do
-  File.read(File.join('public', 'index.html'))
+  File.read(File.join('public', 'graph.html'))
 end
 
 

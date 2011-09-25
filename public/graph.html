@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Query Executor</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="description" content="Run Me A Query">
+
+        <script src="raphael-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="g.raphael-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="g.line-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jquery-1.6.4.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+          window.onload = function() {
+            $.ajax({
+              url: document.location + "/data",
+              dataType: 'json',
+              success: function(content) {
+                if (content != "") {
+                    updateSucceeded(content);
+                }
+                else {
+                  //setTimeout(updateContent, 2000);
+                }
+              },
+              error: function(details) { console.log(details) },
+              beforeSend: function(){$(".icon").addClass("active")},
+              complete: function(){$(".icon").removeClass("active")}
+            });
+          }
+
+            function updateSucceeded(content) {
+              console.log(content)
+                var r = Raphael("holder");
+                r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
+
+                var x = content.x
+                var xlabels = content.xlabels
+                var y = content.y
+
+                r.g.linechart(10, 10, 1400, 220, x, y, {axisxlabels: xlabels});
+
+                // label the graph with the query
+                r.g.text(160, 10, content.query)
+            };
+        </script>
+    </head>
+    <body class="raphael">
+        <div id="holder"></div>
+    </body>
+</html>
+
