@@ -31,6 +31,7 @@ post "/" do
   puts p.inspect
 
   q = Query.create(
+    :created_at => Time.now(),
     :alias => (0...8).map{ ('a'..'z').to_a[rand(26)] }.join,
     :database_url => params["database_url"] || p[:database_url],
     :query => params["query"],
