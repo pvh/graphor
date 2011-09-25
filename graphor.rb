@@ -40,7 +40,7 @@ post "/" do
 end
 
 get '/:id' do
-  File.read(File.join('public', 'graph.html'))
+  erb :query
 end
 
 helpers do
