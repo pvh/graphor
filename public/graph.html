@@ -32,11 +32,15 @@
             function updateSucceeded(content) {
               console.log(content)
                 var r = Raphael("holder");
+
+                $('#query').val(content.query)
+                $('#alias').val(content.alias)
+
                 r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
 
-                var x = content.x
-                var xlabels = content.xlabels
-                var y = content.y
+                var x = content.data.x
+                var xlabels = content.data.xlabels
+                var y = content.data.y
 
                 r.g.linechart(10, 10, 1400, 220, x, y, {axisxlabels: xlabels});
 
@@ -47,6 +51,19 @@
     </head>
     <body class="raphael">
         <div id="holder"></div>
+
+        <form action="/" method="post">
+          <label for="query">Query:</label>
+
+          <br/>
+          <textarea name="query" id="query"></textarea>
+
+          <br/>
+          <input type="hidden" name="parent" id="alias"/>
+
+          <input type="submit"/>
+        </form>
+
     </body>
 </html>
 

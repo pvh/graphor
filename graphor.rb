@@ -15,48 +15,39 @@ get '/' do
     File.read(File.join('public', 'index.html'))
 end
 
-get "/data" do
-  grab_the_data(params["database_url"], params["query"])
-end
-
 delete "/:id" do
   q = Query[:alias => params["id"]]
   q.destroy
 end
 
 get "/:id/data" do
-  q = Query[:alias => params["id"]]
-  grab_the_data(q[:database_url], q[:query])
+  grab_the_data(Query[:alias => params["id"]])
 end
 
 post "/" do
+  p = Query[params["parent"]]
+
+  puts params.inspect
+  puts p.inspect
+
   q = Query.create(
     :alias => (0...8).map{ ('a'..'z').to_a[rand(26)] }.join,
-    :database_url => params["database_url"],
-    :query => params["query"])
+    :database_url => params["database_url"] || p[:database_url],
+    :query => params["query"],
+    :parent_alias => params["parent"])
   redirect q[:alias]
 end
 
-get '/:alias' do
+get '/:id' do
   File.read(File.join('public', 'graph.html'))
 end
 
-
 helpers do
-  def grab_the_data(database_url, query)
-    db = Sequel.connect(database_url)
-    x = []; y = []
-    xlabels = [];
-    db.fetch(query).each do |row|
-      if row[:x].instance_of? Time
-        xlabels << row[:x].to_s
-        x << row[:x].to_i
-      else
-        x << row[:x]
-      end
-      y << row[:y]
-    end
-    {:x => x, :xlabels => xlabels, :y => y, :query => query}.to_json
+  def grab_the_data(query)
+    {:data => query.execute,
+     :query => query[:query],
+     :alias => query[:alias]
+    }.to_json
   end
 end
 
