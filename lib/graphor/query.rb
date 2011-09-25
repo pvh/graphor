@@ -1,6 +1,15 @@
 class Query < Sequel::Model
   unrestrict_primary_key
 
+  one_to_many :derivatives,
+    :class => Query,
+    :key => :parent_alias
+
+  one_to_one :parent,
+    :class => Query,
+    :primary_key => :parent_alias,
+    :key => :alias
+
   def execute
     db = Sequel.connect(self[:database_url])
     x = []; y = []
